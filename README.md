@@ -1,73 +1,111 @@
-# Welcome to your Lovable project
+# 🔥 spark-neural-insight
 
-## Project info
+An interactive web application that visually demonstrates how text prompts are processed inside a neural network and how AI output is generated in real time. This project breaks down the AI inference process — from tokenization to layer animations to live probability distributions — into an intuitive visual experience.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+---
 
-## How can I edit this code?
+## ✨ Key Features
 
-There are several ways of editing your application.
+✅ Prompt Tokenization & Visualization — Converts input text into visual tokens  
+✅ Layer Animation — Simulates token propagation through neural network layers  
+✅ Real-Time Output Streaming — Displays AI-generated text token by token  
+✅ Live Probability Display — Updates token probabilities dynamically  
+✅ Interactive UI — Responsive interface with animations  
+✅ Simplified Neural Metaphor — Makes complex AI concepts approachable
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 🧠 How It Works
 
-Changes made via Lovable will be committed automatically to this repo.
+1. **Tokenization**  
+   Input text is split into simple word tokens for visualization.
 
-**Use your preferred IDE**
+2. **Layer Progression Animation**  
+   Tokens move through animated neural network layers to depict forward processing.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+3. **Streaming Output**  
+   Model responses are streamed in real time, updating UI incrementally.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+4. **Probability Visualization**  
+   Probabilities are estimated from streamed text and shown live (for educational purposes).
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🛠️ Technologies Used
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- **React + TypeScript** — Core app  
+- **Framer Motion** — UI animation  
+- **Custom AI Stream Hook** — Handles streamed model responses  
+- **TailwindCSS** (assumed) — Styling  
+- **Lucide Icons** — Visual clarity  
+- **Modular Components** — Clean structure
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## 🚀 How to Use
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/KevinPratap/spark-neural-insight.git
+cd spark-neural-insight
+
+Install Dependencies
+npm install
+
+Run the App
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Open your browser and navigate to:
 
-**Use GitHub Codespaces**
+http://localhost:3000
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+📈 What You’ll Learn
 
-## What technologies are used for this project?
+This project teaches:
 
-This project is built with:
+How tokens are derived from prompts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+How neural layers conceptually process text
 
-## How can I deploy this project?
+How AI generates text incrementally
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+How probabilities can be visualized live
 
-## Can I connect a custom domain to my Lovable project?
+How streaming responses drive UI updates
 
-Yes, you can!
+💡 Development Insights
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Layer animations help explain forward propagation visually.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Streaming creates a real-time “AI in action” feel.
+
+Simple heuristics approximate prediction confidence for education.
+
+☁️ Future Enhancements
+
+✨ Add attention heatmaps
+✨ Multiple backend model support
+✨ Step-by-step generation controls
+✨ A hosted deployed demo
+
+⚠️ Disclaimer
+
+This tool provides a conceptual simulation of neural network inference for educational purposes. It does not implement real transformer internals.
+
+📌 Screenshots / Demo
+
+(Add screenshots or live demo GIF here once available)
+
+
+---
+
+If you want, I can also generate:  
+✅ A **short tagline** for your GitHub header  
+✅ **Badges section** (license, CI, npm version)  
+✅ A **hero image suggestion** for the top of your README  
+✅ A **demo GIF storyboard** layout
+
+Just tell me what to include! 🚀
+::contentReference[oaicite:0]{index=0}
