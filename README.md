@@ -117,7 +117,8 @@ This tool provides a conceptual simulation of neural network inference for educa
 
 ## 📌 Screenshots / Demo
 
-*(Add screenshots or live demo GIF here once available)*
+<img width="1900" height="866" alt="image" src="https://github.com/user-attachments/assets/ae1e68e7-8b9b-436a-a756-83b3fcf37cce" />
+
 
 ---
 
