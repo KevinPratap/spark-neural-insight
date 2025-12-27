@@ -1,36 +1,41 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { Brain, Zap, Layers, GitBranch } from "lucide-react";
 import { NeuralNetwork } from "@/components/NeuralNetwork";
 import { PromptInput } from "@/components/PromptInput";
 import { TokenDisplay } from "@/components/TokenDisplay";
 import { OutputDisplay } from "@/components/OutputDisplay";
+import { useAIStream } from "@/hooks/useAIStream";
+import { useToast } from "@/hooks/use-toast";
 
 // Simple tokenizer (word-based for visualization)
 const tokenize = (text: string): string[] => {
   return text.trim().split(/\s+/).filter(Boolean);
 };
 
-// Simulate probability distribution
-const generateProbabilities = (): Array<{ token: string; probability: number }> => {
-  const tokens = ["the", "a", "is", "and", "to", "in", "it", "of"];
-  const probs = tokens.map(() => Math.random());
-  const sum = probs.reduce((a, b) => a + b, 0);
-  return tokens
-    .map((token, i) => ({ token, probability: probs[i] / sum }))
+// Generate probabilities from streamed tokens
+const generateProbabilitiesFromTokens = (streamedText: string): Array<{ token: string; probability: number }> => {
+  const words = streamedText.trim().split(/\s+/).filter(Boolean);
+  const uniqueWords = [...new Set(words)].slice(0, 8);
+  
+  if (uniqueWords.length === 0) {
+    return [];
+  }
+  
+  // Create decreasing probabilities based on word frequency/position
+  const wordCounts = words.reduce((acc, word) => {
+    acc[word] = (acc[word] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const total = Object.values(wordCounts).reduce((a, b) => a + b, 0);
+  
+  return uniqueWords
+    .map(word => ({
+      token: word,
+      probability: (wordCounts[word] || 1) / total
+    }))
     .sort((a, b) => b.probability - a.probability);
-};
-
-// Simulate output generation
-const simulateOutput = (input: string): string => {
-  const continuations = [
-    " jumps over the lazy dog.",
-    " runs through the forest quickly.",
-    " appears in the morning light.",
-    " creates beautiful patterns.",
-    " transforms into something new.",
-  ];
-  return input + continuations[Math.floor(Math.random() * continuations.length)];
 };
 
 const Index = () => {
@@ -40,47 +45,55 @@ const Index = () => {
   const [activeLayer, setActiveLayer] = useState(-1);
   const [output, setOutput] = useState("");
   const [probabilities, setProbabilities] = useState<Array<{ token: string; probability: number }>>([]);
+  const { streamResponse, error } = useAIStream();
+  const { toast } = useToast();
+  const streamedTextRef = useRef("");
 
-  const handleVisualize = useCallback(() => {
+  const handleVisualize = useCallback(async () => {
     if (!prompt.trim()) return;
 
     setIsProcessing(true);
     setTokens(tokenize(prompt));
-    setOutput("");
+    setOutput(prompt);
     setProbabilities([]);
     setActiveLayer(0);
+    streamedTextRef.current = "";
 
-    // Simulate layer-by-layer processing
+    // Animate layer progression
     const totalLayers = 5;
     let currentLayer = 0;
 
     const layerInterval = setInterval(() => {
       currentLayer++;
       setActiveLayer(currentLayer);
-
       if (currentLayer >= totalLayers - 1) {
         clearInterval(layerInterval);
-        
-        // Generate output after processing
-        setTimeout(() => {
-          const generatedOutput = simulateOutput(prompt);
-          setProbabilities(generateProbabilities());
-          
-          // Animate output character by character
-          let charIndex = prompt.length;
-          const outputInterval = setInterval(() => {
-            if (charIndex <= generatedOutput.length) {
-              setOutput(generatedOutput.slice(0, charIndex));
-              charIndex++;
-            } else {
-              clearInterval(outputInterval);
-              setIsProcessing(false);
-            }
-          }, 40);
-        }, 500);
       }
-    }, 600);
-  }, [prompt]);
+    }, 400);
+
+    try {
+      await streamResponse(prompt, (delta) => {
+        streamedTextRef.current += delta;
+        setOutput(prompt + streamedTextRef.current);
+        
+        // Update probabilities as we receive tokens
+        const newProbs = generateProbabilitiesFromTokens(streamedTextRef.current);
+        if (newProbs.length > 0) {
+          setProbabilities(newProbs);
+        }
+      });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: error || "Failed to process prompt",
+        variant: "destructive",
+      });
+    } finally {
+      clearInterval(layerInterval);
+      setActiveLayer(totalLayers - 1);
+      setIsProcessing(false);
+    }
+  }, [prompt, streamResponse, error, toast]);
 
   return (
     <div className="min-h-screen">
